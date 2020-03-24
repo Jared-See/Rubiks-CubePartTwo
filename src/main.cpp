@@ -777,6 +777,113 @@ void printFace(cubeFace cubeMainFace){
 }
 
 
+boolean whiteCrossCheck (rubiksCube cubeMain){
+  if(cubeMain.upFace.Fe1 == 'W' && cubeMain.upFace.Fe2 == 'W' && cubeMain.upFace.Fe3 == 'W' && cubeMain.upFace.Fe4 == 'W'){ //If you have a white cross
+      if(cubeMain.frontFace.C == cubeMain.frontFace.Fe1 && cubeMain.rightFace.C == cubeMain.rightFace.Fe1 && cubeMain.leftFace.C == cubeMain.leftFace.Fe1 && cubeMain.backFace.C == cubeMain.backFace.Fe1){ //If the cross is oriented properly
+        Serial.println("Yes White Cross");
+        return true;
+      }
+  } else{
+    Serial.println("No White Cross");
+    return false;
+  }
+}
+
+
+String whiteEdgeFinder(rubiksCube cubeMain){
+    if(cubeMain.frontFace.Fe1 == 'W' || cubeMain.upFace.Fe3 == 'W'){
+      return "TOP EDGE";
+    } else if(cubeMain.frontFace.Fe2 == 'W' || cubeMain.rightFace.Fe4 == 'W'){
+      return "RIGHT EDGE";
+    } else if (cubeMain.frontFace.Fe3 == 'W' || cubeMain.downFace.Fe1 == 'W'){
+      return "BOTTOM EDGE";
+    } else if (cubeMain.frontFace.Fe4 == 'W' || cubeMain.leftFace.Fe2 == 'W'){
+      return "LEFT EDGE";
+    } else {
+      return "NO EDGE";
+    }
+}
+
+
+//White Cross Function
+rubiksCube whiteCrossMaker (rubiksCube& cubeMain){
+    while (whiteCrossCheck(cubeMain) == false)
+    {
+      if(whiteEdgeFinder(cubeMain) == "TOP EDGE"){
+        //If the Cube is in the correct place
+        if(cubeMain.frontFace.C == cubeMain.frontFace.Fe1){
+            Serial.println("Lookin Good");
+        }
+
+        //If its on the right side, but oriented incorrectly
+        if(cubeMain.frontFace.C == cubeMain.upFace.Fe3){
+          rotateR(cubeMain);
+          moveRPrime(cubeMain);
+          moveUp(cubeMain);
+          moveFrontPrime(cubeMain);
+          moveUpPrime(cubeMain);
+          rotateL(cubeMain);
+          Serial.println("Lookin Good");
+        }
+
+        //If its facing up
+        if(cubeMain.frontFace.Fe1 == 'W'){
+          //Take it to the Bottom
+          moveFront(cubeMain);
+          moveFront(cubeMain);
+
+          //Move it to the right side
+          while (cubeMain.downFace.Fe1 != cubeMain.frontFace.C){
+            moveDown(cubeMain);
+            rotateL(cubeMain);
+          }
+
+          moveFront(cubeMain);
+          moveFront(cubeMain);
+
+        }
+
+        //If the white piece is facing you
+        if(cubeMain.upFace.Fe3 == 'W'){
+          //Move the piece to the Bottom
+          moveFront(cubeMain);
+          moveFront(cubeMain);
+
+          //Take the piece to the Bottom
+          while (cubeMain.downFace.Fe1 != cubeMain.frontFace.C){
+            moveDown(cubeMain);
+            rotateL(cubeMain);
+          }
+          
+          //Move it where it needs to be
+          moveFront(cubeMain);
+          moveFront(cubeMain);
+
+          rotateR(cubeMain);
+          moveRPrime(cubeMain);
+          moveUp(cubeMain);
+          moveFrontPrime(cubeMain);
+          moveUpPrime(cubeMain);
+          rotateL(cubeMain);
+          Serial.println("Lookin Good");
+        }
+      }else if(whiteEdgeFinder(cubeMain) == "RIGHT EDGE"){
+        //Code for right edge
+      }else if(whiteEdgeFinder(cubeMain) == "BOTTOM EDGE"){
+        //Code for Bottom Edge
+      }else if(whiteEdgeFinder(cubeMain) == "LEFT EDGE"){
+        //Code for Left Edge
+      }else if(whiteEdgeFinder(cubeMain) == "NO EDGE"){
+        rotateR(cubeMain);
+      }
+    }
+    
+  return cubeMain; 
+}
+
+
+
+
 
 
 
@@ -854,13 +961,4 @@ void loop(){
   mainCube.downFace.Fe4 = 'Y';
   mainCube.downFace.C = 'Y';
 
-  moveUpPrime(mainCube);
-  printFace(mainCube.frontFace);
-  printFace(mainCube.rightFace);
-  printFace(mainCube.leftFace);
-  printFace(mainCube.backFace);
-  printFace(mainCube.upFace);
-  printFace(mainCube.downFace);
-  delay(1000000);
-  
 }
