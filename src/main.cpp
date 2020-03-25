@@ -75,6 +75,7 @@ rubiksCube rotateL(rubiksCube& cubeMain){
   cubeMain.upFace = tempUpFace;
   cubeMain.downFace = tempDownFace;
   cubeMain.backFace = tempLeftFace;
+  Serial.println("rotateL");
 
   return cubeMain;
 }
@@ -97,6 +98,7 @@ rubiksCube rotateR(rubiksCube& cubeMain){
   cubeMain.upFace = tempUpFace;
   cubeMain.downFace = tempDownFace;
   cubeMain.backFace = tempRightCubeFace;
+    Serial.println("rotateR");
 
   return cubeMain;
 }
@@ -158,6 +160,9 @@ rubiksCube moveR(rubiksCube& cubeMain){
   cubeMain.rightFace.FC4 = tempRightFC3;
   cubeMain.rightFace.Fe3 = tempRightFe2;
   cubeMain.rightFace.FC3 = tempRightFC2;
+
+  Serial.println("moveR");
+
 
 
   return cubeMain;
@@ -223,6 +228,7 @@ rubiksCube moveRPrime(rubiksCube& cubeMain){
   cubeMain.rightFace.Fe3 = tempRightFe4;
   cubeMain.rightFace.FC3 = tempRightFC4;
 
+  Serial.println("moveRPrime");
 
   return cubeMain;
 }
@@ -286,6 +292,8 @@ rubiksCube moveL(rubiksCube& cubeMain){
   cubeMain.leftFace.FC4 = templeftFC3;
   cubeMain.leftFace.Fe3 = templeftFe2;
   cubeMain.leftFace.FC3 = templeftFC2;
+
+  Serial.println("moveL");
   
 
   return cubeMain;
@@ -350,6 +358,7 @@ rubiksCube moveLPrime(rubiksCube& cubeMain){
   cubeMain.leftFace.FC4 = templeftFC1;
   cubeMain.leftFace.Fe3 = templeftFe4;
   cubeMain.leftFace.FC3 = templeftFC4;
+  Serial.println("moveLPrime");
   return cubeMain;
 }
 
@@ -413,6 +422,8 @@ rubiksCube moveUpPrime(rubiksCube& cubeMain){
   cubeMain.upFace.FC4 = tempUpFC3;
   cubeMain.upFace.Fe3 = tempUpFe2;
   cubeMain.upFace.FC3 = tempUpFC2;
+
+  Serial.println("moveUpPrime");
   return cubeMain;
 }
 
@@ -476,6 +487,9 @@ rubiksCube moveUp(rubiksCube& cubeMain){
   cubeMain.upFace.FC4 = tempUpFC3;
   cubeMain.upFace.Fe3 = tempUpFe2;
   cubeMain.upFace.FC3 = tempUpFC2;
+
+  Serial.println("moveUp");
+
   return cubeMain;
 }
 
@@ -544,6 +558,9 @@ rubiksCube moveFront(rubiksCube& cubeMain){
   cubeMain.frontFace.FC4 = tempFrontFC3;
   cubeMain.frontFace.Fe3 = tempFrontFe2;
   cubeMain.frontFace.FC3 = tempFrontFC2;
+
+  Serial.println("moveFront");
+
   return cubeMain;
 }
 
@@ -612,6 +629,8 @@ rubiksCube moveFrontPrime(rubiksCube& cubeMain){
   cubeMain.frontFace.FC4 = tempFrontFC1;
   cubeMain.frontFace.Fe3 = tempFrontFe4;
   cubeMain.frontFace.FC3 = tempFrontFC4;
+  Serial.println("moveFrontPrime");
+
   return cubeMain;
 }
 
@@ -680,6 +699,9 @@ rubiksCube moveDown(rubiksCube& cubeMain){
   cubeMain.downFace.FC4 = tempDownFC3;
   cubeMain.downFace.Fe3 = tempDownFe2;
   cubeMain.downFace.FC3 = tempDownFC2;
+
+  Serial.println("moveDown");
+
   return cubeMain;
 }
 
@@ -749,6 +771,9 @@ rubiksCube moveDownPrime(rubiksCube& cubeMain){
   cubeMain.downFace.FC4 = tempDownFC1;
   cubeMain.downFace.Fe3 = tempDownFe4;
   cubeMain.downFace.FC3 = tempDownFC4;
+
+  Serial.println("moveDownPrime");
+
   return cubeMain;
 }
 
@@ -782,6 +807,9 @@ boolean whiteCrossCheck (rubiksCube cubeMain){
       if(cubeMain.frontFace.C == cubeMain.frontFace.Fe1 && cubeMain.rightFace.C == cubeMain.rightFace.Fe1 && cubeMain.leftFace.C == cubeMain.leftFace.Fe1 && cubeMain.backFace.C == cubeMain.backFace.Fe1){ //If the cross is oriented properly
         Serial.println("Yes White Cross");
         return true;
+      } else{
+        Serial.println("You have a white cross but not oriented properly");
+        return false;
       }
   } else{
     Serial.println("No White Cross");
@@ -792,14 +820,19 @@ boolean whiteCrossCheck (rubiksCube cubeMain){
 
 String whiteEdgeFinder(rubiksCube cubeMain){
     if(cubeMain.frontFace.Fe1 == 'W' || cubeMain.upFace.Fe3 == 'W'){
+      Serial.println("White Edge Found On Top");
       return "TOP EDGE";
     } else if(cubeMain.frontFace.Fe2 == 'W' || cubeMain.rightFace.Fe4 == 'W'){
+      Serial.println("White Edge Found On Right");
       return "RIGHT EDGE";
     } else if (cubeMain.frontFace.Fe3 == 'W' || cubeMain.downFace.Fe1 == 'W'){
+      Serial.println("White Edge Found On Bottom");
       return "BOTTOM EDGE";
     } else if (cubeMain.frontFace.Fe4 == 'W' || cubeMain.leftFace.Fe2 == 'W'){
+      Serial.println("White Edge Found On Left");
       return "LEFT EDGE";
     } else {
+      Serial.println("No White Edge Found");
       return "NO EDGE";
     }
 }
@@ -807,76 +840,37 @@ String whiteEdgeFinder(rubiksCube cubeMain){
 
 //White Cross Function
 rubiksCube whiteCrossMaker (rubiksCube& cubeMain){
-    while (whiteCrossCheck(cubeMain) == false)
-    {
+    //Until the white cross is  solved
+     //while (whiteCrossCheck(cubeMain) == false){
+      //If there is a white edge piece on the top
       if(whiteEdgeFinder(cubeMain) == "TOP EDGE"){
-        //If the Cube is in the correct place
-        if(cubeMain.frontFace.C == cubeMain.frontFace.Fe1){
-            Serial.println("Lookin Good");
-        }
-
-        //If its on the right side, but oriented incorrectly
-        if(cubeMain.frontFace.C == cubeMain.upFace.Fe3){
-          rotateR(cubeMain);
-          moveRPrime(cubeMain);
-          moveUp(cubeMain);
-          moveFrontPrime(cubeMain);
-          moveUpPrime(cubeMain);
-          rotateL(cubeMain);
-          Serial.println("Lookin Good");
-        }
-
-        //If its facing up
-        if(cubeMain.frontFace.Fe1 == 'W'){
-          //Take it to the Bottom
-          moveFront(cubeMain);
-          moveFront(cubeMain);
-
-          //Move it to the right side
-          while (cubeMain.downFace.Fe1 != cubeMain.frontFace.C){
-            moveDown(cubeMain);
-            rotateL(cubeMain);
-          }
-
-          moveFront(cubeMain);
-          moveFront(cubeMain);
-
-        }
-
-        //If the white piece is facing you
+        //If the white side is facing up
         if(cubeMain.upFace.Fe3 == 'W'){
-          //Move the piece to the Bottom
-          moveFront(cubeMain);
-          moveFront(cubeMain);
+          //If the piece is on the correct side already
+          if(cubeMain.frontFace.C == cubeMain.frontFace.Fe1){
+            Serial.println("White Top Edge Piece Already In Place");
+          } else{
+            //If the Piece isn't on the correct side
+            Serial.println("Moving White Piece On Facing Up Into Place");
+            //Take it to the Bottom
+            moveFront(cubeMain);
+            moveFront(cubeMain);
 
-          //Take the piece to the Bottom
-          while (cubeMain.downFace.Fe1 != cubeMain.frontFace.C){
-            moveDown(cubeMain);
-            rotateL(cubeMain);
+            //Move the piece to the correct side
+            Serial.println("Entering Loop ");
+            while(cubeMain.frontFace.Fe3 != cubeMain.frontFace.C){
+              moveDown(cubeMain);
+              rotateL(cubeMain);
+            }
+            Serial.println("Finished Loop, Now on the Correct Side");
+            //Move the piece to the top
+            moveFront(cubeMain);
+            moveFront(cubeMain);
+            Serial.println("White edge piece now in place");
           }
-          
-          //Move it where it needs to be
-          moveFront(cubeMain);
-          moveFront(cubeMain);
-
-          rotateR(cubeMain);
-          moveRPrime(cubeMain);
-          moveUp(cubeMain);
-          moveFrontPrime(cubeMain);
-          moveUpPrime(cubeMain);
-          rotateL(cubeMain);
-          Serial.println("Lookin Good");
         }
-      }else if(whiteEdgeFinder(cubeMain) == "RIGHT EDGE"){
-        //Code for right edge
-      }else if(whiteEdgeFinder(cubeMain) == "BOTTOM EDGE"){
-        //Code for Bottom Edge
-      }else if(whiteEdgeFinder(cubeMain) == "LEFT EDGE"){
-        //Code for Left Edge
-      }else if(whiteEdgeFinder(cubeMain) == "NO EDGE"){
-        rotateR(cubeMain);
       }
-    }
+   // }
     
   return cubeMain; 
 }
@@ -900,65 +894,68 @@ void loop(){
   mainCube.upFace = upFace;
   mainCube.frontFace = frontFace;
 
-  mainCube.frontFace.FC1 = 'R';
-  mainCube.frontFace.FC2 = 'R';
+  mainCube.frontFace.FC1 = 'Y';
+  mainCube.frontFace.FC2 = 'B';
   mainCube.frontFace.FC3 = 'R';
-  mainCube.frontFace.FC4 = 'R';
-  mainCube.frontFace.Fe1 = 'R';
-  mainCube.frontFace.Fe2 = 'R';
-  mainCube.frontFace.Fe3 = 'R';
+  mainCube.frontFace.FC4 = 'Y';
+  mainCube.frontFace.Fe1 = 'B';
+  mainCube.frontFace.Fe2 = 'O';
+  mainCube.frontFace.Fe3 = 'Y';
   mainCube.frontFace.Fe4 = 'R';
-  mainCube.frontFace.C = 'R';
+  mainCube.frontFace.C = 'G';
 
-  mainCube.rightFace.FC1 = 'B';
-  mainCube.rightFace.FC2 = 'B';
-  mainCube.rightFace.FC3 = 'B';
-  mainCube.rightFace.FC4 = 'B';
-  mainCube.rightFace.Fe1 = 'B';
-  mainCube.rightFace.Fe2 = 'B';
-  mainCube.rightFace.Fe3 = 'B';
-  mainCube.rightFace.Fe4 = 'B';
-  mainCube.rightFace.C = 'B';
+  mainCube.rightFace.FC1 = 'R';
+  mainCube.rightFace.FC2 = 'O';
+  mainCube.rightFace.FC3 = 'G';
+  mainCube.rightFace.FC4 = 'O';
+  mainCube.rightFace.Fe1 = 'O';
+  mainCube.rightFace.Fe2 = 'R';
+  mainCube.rightFace.Fe3 = 'R';
+  mainCube.rightFace.Fe4 = 'O';
+  mainCube.rightFace.C = 'R';
 
   
-  mainCube.leftFace.FC1 = 'G';
-  mainCube.leftFace.FC2 = 'G';
-  mainCube.leftFace.FC3 = 'G';
-  mainCube.leftFace.FC4 = 'G';
-  mainCube.leftFace.Fe1 = 'G';
+  mainCube.leftFace.FC1 = 'Y';
+  mainCube.leftFace.FC2 = 'B';
+  mainCube.leftFace.FC3 = 'R';
+  mainCube.leftFace.FC4 = 'O';
+  mainCube.leftFace.Fe1 = 'R';
   mainCube.leftFace.Fe2 = 'G';
-  mainCube.leftFace.Fe3 = 'G';
-  mainCube.leftFace.Fe4 = 'G';
-  mainCube.leftFace.C = 'G';
+  mainCube.leftFace.Fe3 = 'O';
+  mainCube.leftFace.Fe4 = 'O';
+  mainCube.leftFace.C = 'O';
 
-  mainCube.backFace.FC1 = 'O';
-  mainCube.backFace.FC2 = 'O';
-  mainCube.backFace.FC3 = 'O';
-  mainCube.backFace.FC4 = 'O';
-  mainCube.backFace.Fe1 = 'O';
-  mainCube.backFace.Fe2 = 'O';
-  mainCube.backFace.Fe3 = 'O';
-  mainCube.backFace.Fe4 = 'O';
-  mainCube.backFace.C = 'O';
+  mainCube.backFace.FC1 = 'G';
+  mainCube.backFace.FC2 = 'B';
+  mainCube.backFace.FC3 = 'Y';
+  mainCube.backFace.FC4 = 'R';
+  mainCube.backFace.Fe1 = 'B';
+  mainCube.backFace.Fe2 = 'W';
+  mainCube.backFace.Fe3 = 'B';
+  mainCube.backFace.Fe4 = 'W';
+  mainCube.backFace.C = 'B';
 
-  mainCube.upFace.FC1 = 'W';
-  mainCube.upFace.FC2 = 'W';
-  mainCube.upFace.FC3 = 'W';
+  mainCube.upFace.FC1 = 'O';
+  mainCube.upFace.FC2 = 'R';
+  mainCube.upFace.FC3 = 'B';
   mainCube.upFace.FC4 = 'W';
   mainCube.upFace.Fe1 = 'W';
-  mainCube.upFace.Fe2 = 'W';
+  mainCube.upFace.Fe2 = 'Y';
   mainCube.upFace.Fe3 = 'W';
-  mainCube.upFace.Fe4 = 'W';
+  mainCube.upFace.Fe4 = 'Y';
   mainCube.upFace.C = 'W';
 
   mainCube.downFace.FC1 = 'Y';
-  mainCube.downFace.FC2 = 'Y';
+  mainCube.downFace.FC2 = 'W';
   mainCube.downFace.FC3 = 'Y';
-  mainCube.downFace.FC4 = 'Y';
-  mainCube.downFace.Fe1 = 'Y';
-  mainCube.downFace.Fe2 = 'Y';
+  mainCube.downFace.FC4 = 'G';
+  mainCube.downFace.Fe1 = 'R';
+  mainCube.downFace.Fe2 = 'B';
   mainCube.downFace.Fe3 = 'Y';
-  mainCube.downFace.Fe4 = 'Y';
+  mainCube.downFace.Fe4 = 'B';
   mainCube.downFace.C = 'Y';
+
+  whiteCrossMaker(mainCube);
+  delay(1000);
 
 }
